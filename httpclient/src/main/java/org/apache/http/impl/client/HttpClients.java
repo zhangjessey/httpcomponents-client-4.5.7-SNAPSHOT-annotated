@@ -34,6 +34,10 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
  * Factory methods for {@link CloseableHttpClient} instances.
  * @since 4.3
  */
+
+/**
+ * CloseableHttpClient实例的工厂方法
+ */
 public class HttpClients {
 
     private HttpClients() {

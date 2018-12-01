@@ -45,6 +45,11 @@ import java.io.IOException;
  *
  * @since 4.0
  */
+
+/**
+ *  此接口只代表了HTTP请求执行的最基本套路。它对请求执行过程没有任何限制或者特定细节，没有留下状态管理，认证，
+ *  重定向处理的规范，直到各个实现。
+ */
 @SuppressWarnings("deprecation")
 public interface HttpClient {
 
