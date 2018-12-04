@@ -47,6 +47,17 @@ import org.apache.http.protocol.HttpContext;
  * from multiple threads.
  * </p>
  *
+ * 表示持久客户端连接的管理器。
+ *   
+ * HTTP连接管理器的目标是作为工厂创建新的
+ * HTTP连接，管理持久连接和同步访问
+ * 持久连接确保只有一个执行线程可以
+ * 可以一次访问一个连接。
+ *  
+ * 此接口的实现必须是线程安全的。 访问共享
+ * 数据的数据必须是同步的，因为此接口的方法可能被
+ * 多个线程执行。
+ *
  * @since 4.3
  */
 public interface HttpClientConnectionManager {

@@ -53,6 +53,10 @@ import org.apache.http.util.EntityUtils;
  *
  * @since 4.3
  */
+
+/**
+ * HttpClient的基本实现，也实现了Closeable。
+ */
 @Contract(threading = ThreadingBehavior.SAFE)
 public abstract class CloseableHttpClient implements HttpClient, Closeable {
 
@@ -86,6 +90,8 @@ public abstract class CloseableHttpClient implements HttpClient, Closeable {
     private static HttpHost determineTarget(final HttpUriRequest request) throws ClientProtocolException {
         // A null target may be acceptable if there is a default target.
         // Otherwise, the null target is detected in the director.
+        //一个空的target可能是可接受的，如果这里有一个默认的target。
+        //否则，空的target会被director侦测到。
         HttpHost target = null;
 
         final URI requestURI = request.getURI();

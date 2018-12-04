@@ -76,6 +76,9 @@ import org.apache.http.util.VersionInfo;
  * execution via proxy and will make no attempts to retry the request
  * in case of a redirect, authentication challenge or I/O error.
  *
+ * 请求executor，实现了HTTP规范最基本的方面，以及与目标服务器最直接的request / response交换。
+ * 这个executor不支持代理执行，并且为了防止重定向，鉴权挑战或IO错误，不会尝试重试请求。
+ *
  * @since 4.3
  */
 @Contract(threading = ThreadingBehavior.IMMUTABLE_CONDITIONAL)

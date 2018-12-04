@@ -47,6 +47,15 @@ import org.apache.http.conn.routing.HttpRoute;
  * runtime exception, or in case the response is not propagated to the caller.
  * </p>
  *
+ *  此接口表示HTTP请求执行链中的一个元素。 每个元素都可以
+ *  是围绕另一个实现横切面的元素的装饰器，或者是
+ *  一个能够为给定请求产生响应的自包含执行程序。
+ *
+ *  重要说明：请注意，这对于装饰器是有必要的，即实现后执行切面的
+ *  或响应任何类型的后处理的，为了释放与响应相关的资源
+ *  通过调用{@link CloseableHttpResponse #close（）}方法，以防I / O，协议或
+ *  运行时异常，或者如果响应未传播给调用者。
+ *
  * @since 4.3
  */
 public interface ClientExecChain {
@@ -65,6 +74,10 @@ public interface ClientExecChain {
      *   (this type of exceptions are potentially recoverable).
      * @throws HttpException in case of an HTTP protocol error
      *   (usually this type of exceptions are non-recoverable).
+     */
+    /**
+     * 执行请求，要么把请求传输给目标服务器，要么传输给请求执行链中的下一个executor。
+     *
      */
     CloseableHttpResponse execute(
             HttpRoute route,
