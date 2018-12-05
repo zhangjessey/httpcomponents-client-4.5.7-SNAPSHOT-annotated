@@ -48,6 +48,10 @@ import org.apache.http.util.Args;
  *
  * @since 4.3
  */
+
+/**
+ * 一个HttpRequest的包装类，可以被用来当前request的属性而不修改原始对象。
+ */
 @SuppressWarnings("deprecation")
 public class HttpRequestWrapper extends AbstractHttpMessage implements HttpUriRequest {
 

@@ -39,6 +39,10 @@ import org.apache.http.concurrent.Cancellable;
  *
  * @since 4.3
  */
+
+/**
+ * 代表一个HttpClientConnection的request，它的寿命周期被connection manager管理。
+ */
 public interface ConnectionRequest extends Cancellable {
 
     /**

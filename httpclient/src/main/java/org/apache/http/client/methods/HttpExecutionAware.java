@@ -35,6 +35,10 @@ import org.apache.http.concurrent.Cancellable;
  *
  * @since 4.3
  */
+
+/**
+ * 此接口可以被这样的对象实现，即那些希望当阻塞IO操作被取消时得到通知的对象。
+ */
 public interface HttpExecutionAware {
 
     boolean isAborted();

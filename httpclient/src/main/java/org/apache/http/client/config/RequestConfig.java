@@ -39,6 +39,11 @@ import org.apache.http.annotation.ThreadingBehavior;
  *  The default setting for stale connection checking changed
  *  to false, and the feature was deprecated starting with version 4.4.
  */
+
+/**
+ * 封装request配置项的不可变类。
+ *长时间连接校验的默认值为false,这个特性将在4.4版本后过时。
+ */
 @Contract(threading = ThreadingBehavior.IMMUTABLE)
 public class RequestConfig implements Cloneable {
 

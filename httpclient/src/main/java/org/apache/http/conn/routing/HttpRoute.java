@@ -45,6 +45,10 @@ import org.apache.http.util.LangUtils;
  *
  * @since 4.0
  */
+
+/**
+ * 一个request的路径。
+ */
 @Contract(threading = ThreadingBehavior.IMMUTABLE)
 public final class HttpRoute implements RouteInfo, Cloneable {
 

@@ -53,6 +53,10 @@ import org.apache.http.protocol.HttpCoreContext;
  *
  * @since 4.3
  */
+
+/**
+ * 适配器类，为了被用在HTTP请求执行过程中的通用HttpContext属性，提供方便的类型安全的set/get方法。
+ */
 public class HttpClientContext extends HttpCoreContext {
 
     /**

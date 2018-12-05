@@ -44,6 +44,16 @@ import org.apache.http.protocol.HttpContext;
  *
  * @since 4.0
  */
+
+/**
+ * 封装了计算HttpRoute到目的host的逻辑。
+ * 实现可能是基于参数，或者基于Java系统属性的标准。
+ *
+ * 这个接口的实现必须是线程安全的。访问共享
+ * 数据的数据必须是同步的，因为此接口的方法可能被
+ * 多个线程执行。
+ *
+ */
 public interface HttpRoutePlanner {
 
     /**
@@ -60,6 +70,9 @@ public interface HttpRoutePlanner {
      * @return  the route that the request should take
      *
      * @throws HttpException    in case of a problem
+     */
+    /**
+     * 决定一个request的路由。
      */
     public HttpRoute determineRoute(HttpHost target,
                                     HttpRequest request,
