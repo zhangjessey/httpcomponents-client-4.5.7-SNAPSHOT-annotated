@@ -79,6 +79,10 @@ import org.apache.http.util.LangUtils;
  *
  * @since 4.3
  */
+
+/**
+ * 一个单个连接的connection manager。
+ */
 @Contract(threading = ThreadingBehavior.SAFE_CONDITIONAL)
 public class BasicHttpClientConnectionManager implements HttpClientConnectionManager, Closeable {
 

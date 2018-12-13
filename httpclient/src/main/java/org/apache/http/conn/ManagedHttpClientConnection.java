@@ -43,6 +43,11 @@ import org.apache.http.HttpInetConnection;
  *
  * @since 4.3
  */
+
+/**
+ * 代表一个被管理的连接，它的状态和生命周期被一个connection manager管理。此接口继承自HttpClientConnection
+ * 有方法去绑定连接到任意的socket,并且获取SSL会话细节。
+ */
 public interface ManagedHttpClientConnection extends HttpClientConnection, HttpInetConnection {
 
     /**
