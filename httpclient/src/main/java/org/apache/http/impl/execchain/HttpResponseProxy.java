@@ -45,6 +45,10 @@ import org.apache.http.params.HttpParams;
  *
  * @since 4.3
  */
+
+/**
+ * HttpResponse的代理类，可以被用来释放与原始响应相关的客户端连接。
+ */
 class HttpResponseProxy implements CloseableHttpResponse {
 
     private final HttpResponse original;

@@ -73,6 +73,10 @@ import org.apache.http.util.Args;
  *
  * @since 4.3
  */
+
+/**
+ * 内部实际使用的HttpClient
+ */
 @Contract(threading = ThreadingBehavior.SAFE_CONDITIONAL)
 @SuppressWarnings("deprecation")
 class InternalHttpClient extends CloseableHttpClient implements Configurable {
@@ -182,6 +186,7 @@ class InternalHttpClient extends CloseableHttpClient implements Configurable {
             }
             setupContext(localcontext);
             final HttpRoute route = determineRoute(target, wrapper, localcontext);
+            //调用请求执行链执行
             return this.execChain.execute(route, wrapper, localcontext, execAware);
         } catch (final HttpException httpException) {
             throw new ClientProtocolException(httpException);

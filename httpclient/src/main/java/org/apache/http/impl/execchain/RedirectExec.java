@@ -65,6 +65,12 @@ import org.apache.http.util.EntityUtils;
  *
  * @since 4.3
  */
+
+/**
+ * 请求执行链中的请求执行器，负责请求重定向的处理
+ *
+ * 更多的职责比如说与对端通信被代理给请求执行链中的下一个执行器。
+ */
 @Contract(threading = ThreadingBehavior.IMMUTABLE_CONDITIONAL)
 public class RedirectExec implements ClientExecChain {
 

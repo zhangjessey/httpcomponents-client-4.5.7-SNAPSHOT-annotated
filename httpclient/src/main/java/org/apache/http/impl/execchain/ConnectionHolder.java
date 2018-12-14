@@ -45,6 +45,10 @@ import org.apache.http.conn.HttpClientConnectionManager;
  *
  * @since 4.3
  */
+
+/**
+ * 内部连接持有者
+ */
 @Contract(threading = ThreadingBehavior.SAFE)
 class ConnectionHolder implements ConnectionReleaseTrigger, Cancellable, Closeable {
 

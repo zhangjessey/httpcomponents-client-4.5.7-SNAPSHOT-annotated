@@ -1127,6 +1127,7 @@ public class HttpClientBuilder {
         execChain = decorateProtocolExec(execChain);
 
         // Add request retry executor, if not disabled
+        //如果没有配置automaticRetriesDisabled为true,添加一个retry executor
         if (!automaticRetriesDisabled) {
             HttpRequestRetryHandler retryHandlerCopy = this.retryHandler;
             if (retryHandlerCopy == null) {

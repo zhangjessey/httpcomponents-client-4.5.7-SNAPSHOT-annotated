@@ -57,6 +57,11 @@ import org.apache.http.util.Args;
  *
  * @since 4.3
  */
+/**
+ * 请求执行链中的请求执行器，负责决定因为I/O错误造成的请求失败是否应该启动重试。
+ *
+ * 更多的职责比如说与对端通信被代理给请求执行链中的下一个执行器。
+ */
 @Contract(threading = ThreadingBehavior.IMMUTABLE_CONDITIONAL)
 public class RetryExec implements ClientExecChain {
 
@@ -84,15 +89,20 @@ public class RetryExec implements ClientExecChain {
         Args.notNull(request, "HTTP request");
         Args.notNull(context, "HTTP context");
         final Header[] origheaders = request.getAllHeaders();
+        //记录实际执行次数
         for (int execCount = 1;; execCount++) {
             try {
+                //MainClientExec执行请求
                 return this.requestExecutor.execute(route, request, context, execAware);
+                //注意：此处理逻辑基于异常处理,这点比较特殊
             } catch (final IOException ex) {
                 if (execAware != null && execAware.isAborted()) {
                     this.log.debug("Request has been aborted");
                     throw ex;
                 }
+                //发起重试
                 if (retryHandler.retryRequest(ex, execCount, context)) {
+                    //返回true 应该继续重试
                     if (this.log.isInfoEnabled()) {
                         this.log.info("I/O exception ("+ ex.getClass().getName() +
                                 ") caught when processing request to "
@@ -112,6 +122,7 @@ public class RetryExec implements ClientExecChain {
                     if (this.log.isInfoEnabled()) {
                         this.log.info("Retrying request to " + route);
                     }
+                    //返回false,不应该继续重试
                 } else {
                     if (ex instanceof NoHttpResponseException) {
                         final NoHttpResponseException updatedex = new NoHttpResponseException(
