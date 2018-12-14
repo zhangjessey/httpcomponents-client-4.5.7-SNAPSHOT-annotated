@@ -1206,8 +1206,9 @@ public class HttpClientBuilder {
                 closeablesCopy = new ArrayList<Closeable>(1);
             }
             final HttpClientConnectionManager cm = connManagerCopy;
-
+            //如果配置了evictExpiredConnections或者evictIdleConnections为true
             if (evictExpiredConnections || evictIdleConnections) {
+                //创建空闲连接清除线程
                 final IdleConnectionEvictor connectionEvictor = new IdleConnectionEvictor(cm,
                         maxIdleTime > 0 ? maxIdleTime : 10, maxIdleTimeUnit != null ? maxIdleTimeUnit : TimeUnit.SECONDS,
                         maxIdleTime, maxIdleTimeUnit);
@@ -1224,6 +1225,7 @@ public class HttpClientBuilder {
                     }
 
                 });
+                //启动空闲连接清除线程
                 connectionEvictor.start();
             }
             closeablesCopy.add(new Closeable() {

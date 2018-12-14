@@ -84,6 +84,13 @@ import org.apache.http.util.EntityUtils;
  *
  * @since 4.3
  */
+
+/**
+ * HTTP请求执行链的最后一个request executor，负责请求或响应与对端的交换。
+ *
+ * 此executor会自动retry请求，以防中间代理或者目标服务器的身份验证。
+ *
+ */
 @SuppressWarnings("deprecation")
 @Contract(threading = ThreadingBehavior.IMMUTABLE_CONDITIONAL)
 public class MainClientExec implements ClientExecChain {
@@ -172,7 +179,7 @@ public class MainClientExec implements ClientExecChain {
         }
 
         Object userToken = context.getUserToken();
-
+        //获取ConnectionRequest，可以通过ConnectionRequest间接获得HttpClientConnection，或者中断请求。
         final ConnectionRequest connRequest = connManager.requestConnection(route, userToken);
         if (execAware != null) {
             if (execAware.isAborted()) {
@@ -187,6 +194,7 @@ public class MainClientExec implements ClientExecChain {
         final HttpClientConnection managedConn;
         try {
             final int timeout = config.getConnectionRequestTimeout();
+            //给定时间内获取一个HttpClientConnection，此处阻塞直到获取到有效连接或者过期或者connection manager关闭。
             managedConn = connRequest.get(timeout > 0 ? timeout : 0, TimeUnit.MILLISECONDS);
         } catch(final InterruptedException interrupted) {
             Thread.currentThread().interrupt();
@@ -211,7 +219,7 @@ public class MainClientExec implements ClientExecChain {
                 }
             }
         }
-
+        //将connection manager以及它管理的HttpClientConnection一起放进ConnectionHolder。
         final ConnectionHolder connHolder = new ConnectionHolder(this.log, this.connManager, managedConn);
         try {
             if (execAware != null) {
@@ -229,10 +237,11 @@ public class MainClientExec implements ClientExecChain {
                 if (execAware != null && execAware.isAborted()) {
                     throw new RequestAbortedException("Request aborted");
                 }
-
+                //如果连接不是已经打开
                 if (!managedConn.isOpen()) {
                     this.log.debug("Opening connection " + route);
                     try {
+                        //建立到target的路由
                         establishRoute(proxyAuthState, managedConn, route, request, context);
                     } catch (final TunnelRefusedException ex) {
                         if (this.log.isDebugEnabled()) {
@@ -267,12 +276,14 @@ public class MainClientExec implements ClientExecChain {
                     }
                     this.authenticator.generateAuthResponse(request, proxyAuthState, context);
                 }
-
+                //发送请求并获取响应
                 response = requestExecutor.execute(request, managedConn, context);
 
                 // The connection is in or can be brought to a re-usable state.
+                //如果连接还在或者可以变为可重用状态。
                 if (reuseStrategy.keepAlive(response, context)) {
                     // Set the idle duration of this connection
+                    //设置此连接的空闲时间
                     final long duration = keepAliveStrategy.getKeepAliveDuration(response, context);
                     if (this.log.isDebugEnabled()) {
                         final String s;
@@ -284,6 +295,7 @@ public class MainClientExec implements ClientExecChain {
                         this.log.debug("Connection can be kept alive " + s);
                     }
                     connHolder.setValidFor(duration, TimeUnit.MILLISECONDS);
+                    //connHolder标记其为可重用
                     connHolder.markReusable();
                 } else {
                     connHolder.markNonReusable();
@@ -292,6 +304,7 @@ public class MainClientExec implements ClientExecChain {
                 if (needAuthentication(
                         targetAuthState, proxyAuthState, route, response, context)) {
                     // Make sure the response body is fully consumed, if present
+                    //如果有的话，确保response body被完全消费。
                     final HttpEntity entity = response.getEntity();
                     if (connHolder.isReusable()) {
                         EntityUtils.consume(entity);
@@ -330,9 +343,11 @@ public class MainClientExec implements ClientExecChain {
             }
 
             // check for entity, release connection if possible
+            //检查实体，如果可以的话释放连接
             final HttpEntity entity = response.getEntity();
             if (entity == null || !entity.isStreaming()) {
                 // connection not needed and (assumed to be) in re-usable state
+                //连接此时不需要，假设它处于可重用状态，释放连接
                 connHolder.releaseConnection();
                 return new HttpResponseProxy(response, null);
             }

@@ -264,6 +264,7 @@ public class PoolingHttpClientConnectionManager
         if (this.log.isDebugEnabled()) {
             this.log.debug("Connection request: " + format(route, state) + formatStats(route));
         }
+        //从CPool中获取（租借）一个泛型为CPoolEntry的Future，便于之后获取CPoolEntry
         final Future<CPoolEntry> future = this.pool.lease(route, state, null);
         return new ConnectionRequest() {
 
@@ -276,6 +277,7 @@ public class PoolingHttpClientConnectionManager
             public HttpClientConnection get(
                     final long timeout,
                     final TimeUnit timeUnit) throws InterruptedException, ExecutionException, ConnectionPoolTimeoutException {
+                //通过future异步获取HttpClientConnection
                 final HttpClientConnection conn = leaseConnection(future, timeout, timeUnit);
                 if (conn.isOpen()) {
                     final HttpHost host;
@@ -300,6 +302,7 @@ public class PoolingHttpClientConnectionManager
             final TimeUnit timeUnit) throws InterruptedException, ExecutionException, ConnectionPoolTimeoutException {
         final CPoolEntry entry;
         try {
+            //从传入的future异步获取CPoolEntry
             entry = future.get(timeout, timeUnit);
             if (entry == null || future.isCancelled()) {
                 throw new InterruptedException();
@@ -308,6 +311,7 @@ public class PoolingHttpClientConnectionManager
             if (this.log.isDebugEnabled()) {
                 this.log.debug("Connection leased: " + format(entry) + formatStats(entry.getRoute()));
             }
+            //CPoolEntry封装进CPoolProxy
             return CPoolProxy.newProxy(entry);
         } catch (final TimeoutException ex) {
             throw new ConnectionPoolTimeoutException("Timeout waiting for connection from pool");

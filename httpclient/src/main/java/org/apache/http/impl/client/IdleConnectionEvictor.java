@@ -58,14 +58,19 @@ public final class IdleConnectionEvictor {
         this.threadFactory = threadFactory != null ? threadFactory : new DefaultThreadFactory();
         this.sleepTimeMs = sleepTimeUnit != null ? sleepTimeUnit.toMillis(sleepTime) : sleepTime;
         this.maxIdleTimeMs = maxIdleTimeUnit != null ? maxIdleTimeUnit.toMillis(maxIdleTime) : maxIdleTime;
+        //构造方法中创建实际线程
         this.thread = this.threadFactory.newThread(new Runnable() {
             @Override
             public void run() {
                 try {
+                    //不中断就一直循环
                     while (!Thread.currentThread().isInterrupted()) {
+                        //sleep一段时间，作为定时job
                         Thread.sleep(sleepTimeMs);
+                        //调用连接池方法关闭过期连接
                         connectionManager.closeExpiredConnections();
                         if (maxIdleTimeMs > 0) {
+                            //如果maxIdleTimeMs > 0，调用连接池方法关闭空闲连接
                             connectionManager.closeIdleConnections(maxIdleTimeMs, TimeUnit.MILLISECONDS);
                         }
                     }

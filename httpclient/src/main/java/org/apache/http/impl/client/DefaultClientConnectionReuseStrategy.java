@@ -45,20 +45,23 @@ public class DefaultClientConnectionReuseStrategy extends DefaultConnectionReuse
 
     @Override
     public boolean keepAlive(final HttpResponse response, final HttpContext context) {
-
+        //从context中获取HttpRequest
         final HttpRequest request = (HttpRequest) context.getAttribute(HttpCoreContext.HTTP_REQUEST);
         if (request != null) {
+            //request中获取header里的Connection
             final Header[] connHeaders = request.getHeaders(HttpHeaders.CONNECTION);
             if (connHeaders.length != 0) {
                 final TokenIterator ti = new BasicTokenIterator(new BasicHeaderIterator(connHeaders, null));
                 while (ti.hasNext()) {
                     final String token = ti.nextToken();
+                    //如果request header包含Connection:Close,不重用连接
                     if (HTTP.CONN_CLOSE.equalsIgnoreCase(token)) {
                         return false;
                     }
                 }
             }
         }
+        //继续根据父类规则判断
         return super.keepAlive(response, context);
     }
 
