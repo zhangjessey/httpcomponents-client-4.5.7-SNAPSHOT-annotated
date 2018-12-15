@@ -99,6 +99,21 @@ import org.apache.http.util.Asserts;
  *
  * @since 4.3
  */
+
+/**
+ * ClientConnectionPoolManager维持一个HttpClientConnection的池，并且能够服务来自多个执行线程的连接请求。
+ * 连接被池化，基于每个route。请求路由获取已经被线程池管理的持久化连接，会是从池中租借一个连接而不是创建一个
+ * 新连接。
+ *
+ * ClientConnectionPoolManager维护者每个route对应的最大连接数量，以及最大总的连接数量。每个默认实现都会创建
+ * 每个route不超过2个并发连接，并且总数不超过20个连接。对许多实际应用来说，这个限制太过，尤其是他们用HTTP作为传输
+ * 协议。连接限制可以被调整，通过使用ConnPoolControl方法。
+ *
+ * TTL被设置于构造时，定义了持久化连接的最大生命周期，无论它们的过期设置。TTL过后，没有持久化连接会被重用。
+ *
+ * 失效连接的处理在4.4版本被变更。以前，代码会默认检查每个连接，在重用它之前。现在的代码只会检查上次使用连接的
+ * 时间开始带现在为止是否超过了设置好的超时时间。默认超时时间是2s。
+ */
 @Contract(threading = ThreadingBehavior.SAFE_CONDITIONAL)
 public class PoolingHttpClientConnectionManager
     implements HttpClientConnectionManager, ConnPoolControl<HttpRoute>, Closeable {

@@ -39,6 +39,10 @@ import org.apache.http.util.Args;
  *
  * @since 4.4
  */
+
+/**
+ * 这个类维护一个后台线程，执行清除政策为那些过期或者空闲的仍然存活在连接池中的持久化连接。
+ */
 public final class IdleConnectionEvictor {
 
     private final HttpClientConnectionManager connectionManager;

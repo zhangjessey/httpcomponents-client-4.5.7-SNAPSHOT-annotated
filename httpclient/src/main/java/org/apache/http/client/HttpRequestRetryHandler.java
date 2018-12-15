@@ -41,6 +41,13 @@ import org.apache.http.protocol.HttpContext;
  *
  * @since 4.0
  */
+
+/**
+ * 一个handler来判断一个HttpRequest是否应该retry，在执行期间的一个可恢复异常之后。
+ *
+ * 这个接口的实现必须是线程安全的。访问共享数据必须是同步的，因为这个接口的方法可能
+ * 会被多个线程执行。
+ */
 public interface HttpRequestRetryHandler {
 
     /**
