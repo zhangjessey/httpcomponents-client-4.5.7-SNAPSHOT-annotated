@@ -53,15 +53,25 @@ import org.apache.http.util.Args;
  *
  * @since 4.0
  */
+
+/**
+ * 默认被request executors使用的HttpRequestRetryHandler
+ */
 @Contract(threading = ThreadingBehavior.IMMUTABLE)
 public class DefaultHttpRequestRetryHandler implements HttpRequestRetryHandler {
 
     public static final DefaultHttpRequestRetryHandler INSTANCE = new DefaultHttpRequestRetryHandler();
 
     /** the number of times a method will be retried */
+    /**
+     * 重试次数
+     */
     private final int retryCount;
 
     /** Whether or not methods that have successfully sent their request will be retried */
+    /**
+     * 已成功发送的请求的方法是否会被重试
+     */
     private final boolean requestSentRetryEnabled;
 
     private final Set<Class<? extends IOException>> nonRetriableClasses;
@@ -111,6 +121,15 @@ public class DefaultHttpRequestRetryHandler implements HttpRequestRetryHandler {
     /**
      * Create the request retry handler with a retry count of 3, requestSentRetryEnabled false
      * and using the following list of non-retriable IOException classes: <br>
+     * <ul>
+     * <li>InterruptedIOException</li>
+     * <li>UnknownHostException</li>
+     * <li>ConnectException</li>
+     * <li>SSLException</li>
+     * </ul>
+     */
+    /**
+     * 创建一个retry handler，它的重试次数为3，requestSentRetryEnabled为false,并且下列I/O异常不会重试：
      * <ul>
      * <li>InterruptedIOException</li>
      * <li>UnknownHostException</li>
