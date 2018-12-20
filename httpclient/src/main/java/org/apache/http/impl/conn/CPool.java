@@ -42,6 +42,10 @@ import org.apache.http.pool.PoolEntryCallback;
 /**
  * @since 4.3
  */
+
+/**
+ * 实际连接池
+ */
 @Contract(threading = ThreadingBehavior.SAFE)
 class CPool extends AbstractConnPool<HttpRoute, ManagedHttpClientConnection, CPoolEntry> {
 
