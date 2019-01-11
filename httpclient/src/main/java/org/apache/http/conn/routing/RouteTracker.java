@@ -39,6 +39,10 @@ import org.apache.http.util.LangUtils;
  *
  * @since 4.0
  */
+
+/**
+ * 在建立路由的过程中，辅助跟踪步骤
+ */
 public final class RouteTracker implements RouteInfo, Cloneable {
 
     /** The target host to connect to. */

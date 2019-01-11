@@ -387,6 +387,9 @@ public class MainClientExec implements ClientExecChain {
     /**
      * Establishes the target route.
      */
+    /**
+     * 建立目标路由
+     */
     void establishRoute(
             final AuthState proxyAuthState,
             final HttpClientConnection managedConn,

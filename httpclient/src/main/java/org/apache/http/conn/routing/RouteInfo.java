@@ -36,6 +36,10 @@ import org.apache.http.HttpHost;
  *
  * @since 4.0
  */
+
+/**
+ * 路由信息的只读接口
+ */
 public interface RouteInfo {
 
     /**
@@ -45,6 +49,11 @@ public interface RouteInfo {
      * Tunnelled routes are established by connecting to the first proxy
      * and tunnelling through all proxies to the target.
      * Routes without a proxy cannot be tunnelled.
+     */
+    /**
+     * 路由的隧道类型
+     * 直连或者通过第一个代理到目标服务器，则建立了PLAIN路由。
+     *
      */
     public enum TunnelType { PLAIN, TUNNELLED }
 

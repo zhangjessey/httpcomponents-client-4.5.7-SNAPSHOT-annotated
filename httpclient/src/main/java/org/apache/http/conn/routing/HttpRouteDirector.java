@@ -34,6 +34,11 @@ package org.apache.http.conn.routing;
  *
  * @since 4.0
  */
+
+/**
+ * 在建立路由的时候提供directions。
+ * 此接口的实现比较planned route与tracked route，指明所需的下一步
+ */
 public interface HttpRouteDirector {
 
     /** Indicates that the route can not be established at all. */

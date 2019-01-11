@@ -41,12 +41,17 @@ import org.apache.http.protocol.HttpContext;
 /**
 /**
  * A handler for determining if an HTTP response represents an authentication challenge that was
- * sent back to the client as a result of authentication failure.
- * <p>
- * Implementations of this interface must be thread-safe. Access to shared data must be
- * synchronized as methods of this interface may be executed from multiple threads.
- *
+ *  * sent back to the client as a result of authentication failure.
+ *  * <p>
+ *  * Implementations of this interface must be thread-safe. Access to shared data must be
+ *  * synchronized as methods of this interface may be executed from multiple threads.
+ *  *
  * @since 4.2
+ */
+
+/**
+ * 用于确定HTTP响应是否表示身份鉴权质询的handler,即
+ * 由于鉴权失败而发送回客户端。
  */
 public interface AuthenticationStrategy {
 
